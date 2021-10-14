@@ -21,4 +21,7 @@ After you set your configurations, you can now press the "Visualize" button at t
 - Depth-First Search - Depth First Search is the other fundamental graph traversal algorithm. It starts from a chosen node, picks one of its neighbors, and then traverses as far as it can along that path before backtracking. It also only applicable to unweighted graphs. Additionally, DFS is not optimal as it produce a much longer path than any pathfinding algorithms such as BFS. 
 
 ## Screenshots ##
-
+![Screenshot (2434)](https://user-images.githubusercontent.com/78135477/137283457-b9f9ae67-2f4f-4a7e-9024-4e14e90fd5d1.png)
+![Screenshot (2435)](https://user-images.githubusercontent.com/78135477/137283469-c9630fe3-7e31-4226-b756-f580e1e218f4.png)
+![Screenshot (2438)](https://user-images.githubusercontent.com/78135477/137283480-95fe42ce-7fbe-4c17-a42c-d4d090fa9e35.png)
+![Screenshot (2451)](https://user-images.githubusercontent.com/78135477/137283498-5ec25d47-1c23-42fd-8d1f-ca571c977916.png)
