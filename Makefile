@@ -1,7 +1,7 @@
 CC := g++
 CFLAGS := -Wall
 
-OBJS := main.o App.o Textures.o Events.o
+OBJS := main.o App.o Node.o Graph.o Texture.o Algorithms.o
 SFLIB := -LExternal/SFML/lib -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 INCLUDES := -IExternal/SFML/include
 SRC := src
@@ -9,7 +9,7 @@ SRC := src
 all: Compile clean
 
 Compile: $(OBJS)
-	$(CC) $(CFLAGS) Assets/iconres.res $^  $(SFLIB)
+	$(CC) $(CFLAGS) Assets/iconres.res $^ -mwindows $(SFLIB) -o "Pathfinding Visualizer - Joshua Inovero"
 
 main.o: $(SRC)/main.cpp
 	$(CC) $(CFLAGS) $(INCLUDES) -c $<
@@ -17,11 +17,16 @@ main.o: $(SRC)/main.cpp
 App.o: $(SRC)/App.cpp
 	$(CC) $(CFLAGS) $(INCLUDES) -c $<
 
-Textures.o: $(SRC)/Textures.cpp
+Node.o: $(SRC)/Node.cpp
 	$(CC) $(CFLAGS) $(INCLUDES) -c $<
 
-Events.o: $(SRC)/Events.cpp
+Graph.o: $(SRC)/Graph.cpp
 	$(CC) $(CFLAGS) $(INCLUDES) -c $<
 
+Texture.o: $(SRC)/Texture.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) -c $<
+
+Algorithms.o: $(SRC)/Algorithms.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) -c $<
 clean:
 	del *.o
