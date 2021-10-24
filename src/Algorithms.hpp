@@ -9,6 +9,7 @@
 
 class Algorithms_ {
 public:
+    /* Pathfinding ALgorithms */
     double calc_heuristic(sf::Vector2i p1, sf::Vector2i p2);
     void reconstruct_path(std::unordered_map<Node*, Node*> previous_vertex, Node *current, Node* start_node, 
     std::vector<Node*> &path_nodes);
@@ -23,6 +24,7 @@ public:
     void dfs(std::vector<Node*> board[45], Node* start_node, Node* end_node, uint32_t total_rows,
     std::vector<Node*> &visited_nodes, std::vector<Node*> &path_nodes);
 
+    /*Maze Algorithms*/
     void maze_recursion(Node* current, std::vector<Node*> board[45]);
     void generate_maze(std::vector<Node*> board[45]);
     void random_terrain(std::vector<Node*> board[45], Node* start_node, Node* end_node, uint32_t total_rows);

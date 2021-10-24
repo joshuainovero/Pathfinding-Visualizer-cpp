@@ -10,16 +10,16 @@ enum Maze_Algorithms {RM, RAND_T};
 class Graph {
 public:
     std::vector<Node*> board[45];  
-    uint32_t board_width;
-    uint32_t total_rows;
-    Node* start_node;
-    Node* end_node;
-    float tile_gap;
     sf::RectangleShape horLine, vertLine;
     sf::RectangleShape green_tile, red_tile;
     Algorithms_ algorithms;
     PF_Algorithms current_algo;
     Maze_Algorithms current_maze_algo;
+    Node* start_node;
+    Node* end_node;
+    uint32_t board_width;
+    uint32_t total_rows;
+    float tile_gap;
 
     void draw_grid(sf::RenderWindow *window);
     void draw_tiles(sf::RenderWindow *window, bool visualize_visiting);
