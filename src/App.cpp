@@ -1,7 +1,7 @@
 #include "App.hpp"
 #include <iostream>
 
-App::App() : graph(45, sf::VideoMode::getDesktopMode().height), textures(){
+App::App(uint32_t total_rows) : graph(total_rows, sf::VideoMode::getDesktopMode().height), textures(){
     window = new sf::RenderWindow(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "Pathfinding Visualizer", sf::Style::Close | sf::Style::Fullscreen);
     window->setFramerateLimit(120);
     dt = 0.0f;
@@ -14,6 +14,14 @@ App::App() : graph(45, sf::VideoMode::getDesktopMode().height), textures(){
     path_count = 0;
     maze_count = 0;
     clock_timer = nullptr;
+
+    maze_path = new std::vector<Node*>[total_rows];
+
+    row_sizes[0] = 15;
+    row_sizes[1] = 25;
+    row_sizes[2] = 35;
+    row_sizes[3] = 45;
+    mouse_scroll_value = 3;
 }
 
 bool App::app_in_focus(sf::RenderWindow *app) {
@@ -42,8 +50,8 @@ void App::updateSFMLEvents(){
             case sf::Event::TextEntered:
                 if (sfEvent.text.unicode == int('c') || sfEvent.text.unicode == int('C')){
                     if (!visualize_maze && !visualize_path && !visualize_visiting){
-                        for (auto row : graph.board){
-                            for (auto node : row){
+                        for (size_t i = 0; i < graph.total_rows; ++i){
+                            for (auto node : graph.board[i]){
                                 node->visited_maze = false;
                                 if (node != graph.start_node && node != graph.end_node){
                                     node->reset();
@@ -55,6 +63,30 @@ void App::updateSFMLEvents(){
                 else if (sfEvent.text.unicode == 27)
                     window->close();
             
+            break;
+            case sf::Event::MouseWheelMoved:
+                if(!visualize_maze && !visualize_path && !visualize_visiting){
+                    temp_mouse_value = mouse_scroll_value;
+                    if (sfEvent.mouseWheel.delta > 0){
+                        if (mouse_scroll_value < 3)
+                            mouse_scroll_value++;
+                    }
+                    else {
+                        if (mouse_scroll_value > 0)
+                            mouse_scroll_value--;
+                    }
+                    if (mouse_scroll_value != temp_mouse_value){
+                        for (size_t i = 0; i < graph.total_rows; ++i){
+                            for (Node *node : graph.board[i]) {
+                                delete node;
+                            }
+                            graph.board[i].clear();
+                        }
+                        delete [] graph.board;
+                        graph.construct_graph(row_sizes[mouse_scroll_value], sf::VideoMode::getDesktopMode().height);
+
+                    }
+                }
             break;
             default:break;
         }
@@ -69,8 +101,8 @@ void App::update(){
             sf::Vector2i rowcol = graph.rowcol_pos_click(mousePos.getPosition(*window));
             if (finished_visualizing){
                 if (!mouse_down){
-                    for (auto row : graph.board){
-                        for (auto node : row){
+                    for (size_t i = 0; i < graph.total_rows; ++i){
+                        for (auto node : graph.board[i]){
                             if (node->color == sf::Color(PATH_COLOR) || node->color == sf::Color(VISITED_COLOR)
                             || node->color == sf::Color(OPEN_COLOR)){
                                 node->reset();
@@ -101,9 +133,8 @@ void App::update(){
                 if (graph.start_node != nullptr  && graph.end_node != nullptr){
                     if (!visualize_visiting && !visualize_path){
                         if (!mouse_down){
-
-                            for (auto row : graph.board){
-                                for (auto node : row){
+                            for (size_t i = 0; i < graph.total_rows; ++i){
+                                for (auto node : graph.board[i]){
                                     node->update_neighbors(graph.board);
                                 }
                             }
@@ -148,17 +179,17 @@ void App::update(){
                 if (graph.start_node != nullptr  && graph.end_node != nullptr){
                     if (!visualize_visiting && !visualize_path && !visualize_maze){
                         if (!mouse_down){
-                            for (auto row : graph.board){
-                                for (auto node : row){
+                            for (size_t i = 0; i < graph.total_rows; ++i){
+                                for (auto node : graph.board[i]){
                                     node->visited_maze = false;
                                     if (node != graph.start_node && node != graph.end_node){
                                         node->reset();
-                                    }
+                                    } 
                                 }
                             }
-                            for (auto row : graph.board){
-                                for (auto node : row){
-                                    node->update_neighbors(graph.board);
+                            for (size_t i = 0; i < graph.total_rows; ++i){
+                                for (auto node : graph.board[i]){
+                                   node->update_neighbors(graph.board);  
                                 }
                             }
                             switch (graph.current_maze_algo){
@@ -177,7 +208,7 @@ void App::update(){
                                     graph.start_node->reset();
                                     graph.end_node->reset();
                                     graph.start_node = graph.board[0][0];
-                                    graph.end_node = graph.board[44][44];
+                                    graph.end_node = graph.board[graph.total_rows - 1][graph.total_rows - 1];
                                     graph.start_node->set_start();
                                     graph.end_node->set_target();
                                     visualize_maze = true;
@@ -195,8 +226,8 @@ void App::update(){
             else if (textures.clickable_in_range(textures.clear_ranges, mousePos)){
                 if (graph.start_node != nullptr  && graph.end_node != nullptr){
                     if (!visualize_visiting && !visualize_path && !visualize_maze){
-                        for (auto row : graph.board){
-                            for (auto node : row){
+                        for (size_t i = 0; i < graph.total_rows; ++i){
+                            for (auto node : graph.board[i]){
                                 node->visited_maze = false;
                                 if (node != graph.start_node && node != graph.end_node){
                                     node->reset();
@@ -250,7 +281,7 @@ void App::update(){
             }
             else if (textures.clickable_in_range(textures.help_ranges, mousePos)){
                 if (!mouse_down){
-                    MessageBoxA(NULL, "Left click on tiles - place obstacles\nRight click on tiles - remove obstacles\nMove start point & target point - right click\nExit - esc", "Help", MB_ICONINFORMATION);
+                    MessageBoxA(NULL, "Left click on tiles - place obstacles\nRight click on tiles - remove obstacles\nScroll - Adjust grid\nMove start point & target point - right click\nExit - esc", "Help", MB_ICONINFORMATION);
                     mouse_down = true;
                 }
             }
@@ -409,5 +440,15 @@ void App::run(){
 }
 
 App::~App(){
+    for (size_t i = 0; i < graph.total_rows; ++i){
+        for (auto *node : graph.board[i]){
+            delete node;
+        }
+        for (auto *node2 : maze_path[i]){
+            delete node2;
+        }
+    }
+    delete [] graph.board;
+    delete [] maze_path;
     delete window;
 }

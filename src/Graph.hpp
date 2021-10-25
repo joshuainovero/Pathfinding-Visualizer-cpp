@@ -9,7 +9,7 @@ enum Maze_Algorithms {RM, RAND_T};
 
 class Graph {
 public:
-    std::vector<Node*> board[45];  
+    std::vector<Node*> *board;  
     sf::RectangleShape horLine, vertLine;
     sf::RectangleShape green_tile, red_tile;
     Algorithms_ algorithms;
@@ -23,7 +23,7 @@ public:
 
     void draw_grid(sf::RenderWindow *window);
     void draw_tiles(sf::RenderWindow *window, bool visualize_visiting);
-    void construct_graph();
+    void construct_graph(uint32_t rows, uint32_t width);
     sf::Vector2i rowcol_pos_click(sf::Vector2i pos);
     Graph(uint32_t rows, uint32_t width);
 };

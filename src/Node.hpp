@@ -28,7 +28,7 @@ public:
 
 
     /* Tile state */
-    void update_neighbors(std::vector<Node*> board[50]);
+    void update_neighbors(std::vector<Node*> *board);
     void set_start();
     void set_target();
     void set_obstruction();

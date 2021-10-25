@@ -16,7 +16,7 @@ std::vector<Node*> &path_nodes){
 
 }
 
-void Algorithms_::a_star(std::vector<Node*> board[45], Node* start_node, Node* end_node, uint32_t total_rows,
+void Algorithms_::a_star(std::vector<Node*> *board, Node* start_node, Node* end_node, uint32_t total_rows,
     std::vector<Node*> &visited_nodes, std::vector<Node*> &path_nodes){
     uint32_t precedence = 0;
     std::set<std::pair<std::pair<double, uint32_t>, Node*>> priority_queue;
@@ -76,7 +76,7 @@ void Algorithms_::a_star(std::vector<Node*> board[45], Node* start_node, Node* e
     visited_nodes.clear();
 }
 
-void Algorithms_::dijkstra(std::vector<Node*> board[45], Node* start_node, Node* end_node, uint32_t total_rows,
+void Algorithms_::dijkstra(std::vector<Node*> *board, Node* start_node, Node* end_node, uint32_t total_rows,
 std::vector<Node*> &visited_nodes, std::vector<Node*> &path_nodes){
     std::set<std::pair<uint32_t, Node*>> priority_queue;
     std::unordered_map<Node*, uint32_t> g_score;
@@ -120,7 +120,7 @@ std::vector<Node*> &visited_nodes, std::vector<Node*> &path_nodes){
         reconstruct_path(previous_node, end_node, start_node, path_nodes);
 }
 
-void Algorithms_::bfs(std::vector<Node*> board[45], Node* start_node, Node* end_node, uint32_t total_rows,
+void Algorithms_::bfs(std::vector<Node*> *board, Node* start_node, Node* end_node, uint32_t total_rows,
 std::vector<Node*> &visited_nodes, std::vector<Node*> &path_nodes){
     std::unordered_map<Node*, bool> visited;
     std::queue<Node*> q;
@@ -167,7 +167,7 @@ std::unordered_map<Node*, Node*> &previous_node, std::vector<Node*> &visited_nod
     }
 }
 
-void Algorithms_::dfs(std::vector<Node*> board[45], Node* start_node, Node* end_node, uint32_t total_rows,
+void Algorithms_::dfs(std::vector<Node*> *board, Node* start_node, Node* end_node, uint32_t total_rows,
 std::vector<Node*> &visited_nodes, std::vector<Node*> &path_nodes){
     std::unordered_map<Node*, Node*> previous_node;
     std::unordered_map<Node*, bool> visited;
@@ -180,7 +180,7 @@ std::vector<Node*> &visited_nodes, std::vector<Node*> &path_nodes){
         reconstruct_path(previous_node, end_node, start_node, path_nodes);
 }
 
-void Algorithms_::maze_recursion(Node* current, std::vector<Node*> board[45]){
+void Algorithms_::maze_recursion(Node* current, std::vector<Node*> *board){
     current->visited_maze = true;
     std::vector<Node*> randomized_neighbors = current->neighbors;
     std::random_shuffle(randomized_neighbors.begin(), randomized_neighbors.end());
@@ -219,16 +219,18 @@ void Algorithms_::maze_recursion(Node* current, std::vector<Node*> board[45]){
     
 }
 
-void Algorithms_::generate_maze(std::vector<Node*> board[45]){
+void Algorithms_::generate_maze(std::vector<Node*> *board){
     std::srand(time(0));
     std::unordered_map<Node*, bool> visited;
     Node* current = board[0][0];
     maze_recursion(current, board);
 }
 
-void Algorithms_::random_terrain(std::vector<Node*> board[45], Node* start_node, Node* end_node, uint32_t total_rows){
+void Algorithms_::random_terrain(std::vector<Node*> *board, Node* start_node, Node* end_node, uint32_t total_rows){
     uint32_t counter = 0;
-    while (counter != 500){
+    const float ratio_overall = 0.7530864198f;
+    uint32_t total_walls = std::floor((float)std::pow(total_rows, 2) - ((float)std::pow(total_rows, 2) * ratio_overall));
+    while (counter != total_walls){
         sf::Vector2i random_pos (rand() % total_rows, rand() % total_rows);     
         if (board[random_pos.x][random_pos.y] != start_node && board[random_pos.x][random_pos.y] != end_node){
             board[random_pos.x][random_pos.y]->set_obstruction();

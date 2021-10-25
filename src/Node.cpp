@@ -16,7 +16,7 @@ Node::Node(uint32_t row, uint32_t col, float width, uint32_t total_rows){
 
 }
 
-void Node::update_neighbors(std::vector<Node*> board[50]){
+void Node::update_neighbors(std::vector<Node*> *board){
     neighbors.clear();
     if (row < total_rows - 1 && !(board[row + 1][col]->is_obstruction()))
         neighbors.push_back(board[row + 1][col]);

@@ -14,8 +14,10 @@ private:
     sf::Mouse mousePos;
     std::vector<Node*> visited_nodes;
     std::vector<Node*> path_nodes;
-    std::vector<Node*> maze_path[45];
-    std::vector<Node*> maze_path2[45];
+    std::vector<Node*> *maze_path;
+    std::unordered_map<uint32_t, uint32_t> row_sizes;
+    uint32_t mouse_scroll_value;
+    uint32_t temp_mouse_value;
     Texture_ textures;
     Graph graph;
     uint32_t visited_count, path_count, maze_count;
@@ -36,7 +38,7 @@ private:
 public:
     void run();
 
-    App();
+    App(uint32_t total_rows);
     ~App();
 };
 
