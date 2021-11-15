@@ -24,7 +24,7 @@ public:
     void draw_grid(sf::RenderWindow *window);
     void draw_tiles(sf::RenderWindow *window, bool visualize_visiting);
     void construct_graph(uint32_t rows, uint32_t width);
-    sf::Vector2i rowcol_pos_click(sf::Vector2i pos);
+    sf::Vector2u rowcol_pos_click(sf::Vector2i pos);
     Graph(uint32_t rows, uint32_t width);
 };
 

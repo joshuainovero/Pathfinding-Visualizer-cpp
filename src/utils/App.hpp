@@ -1,6 +1,5 @@
 #ifndef APP_H
 #define APP_H
-#include <Windows.h>
 #include <SFML/Graphics.hpp>
 #include "Texture.hpp"
 #include "Graph.hpp"
@@ -18,8 +17,8 @@ private:
     std::unordered_map<uint32_t, uint32_t> row_sizes;
     uint32_t mouse_scroll_value;
     uint32_t temp_mouse_value;
-    Texture_ textures;
     Graph graph;
+    Texture_ textures;
     uint32_t visited_count, path_count, maze_count;
     
     float dt;
@@ -29,11 +28,11 @@ private:
     bool finished_visualizing;
     bool visualize_maze;
     bool mouse_down;
+    bool app_in_focus;
 
     void render();
     void updateSFMLEvents();
     void update();
-    bool app_in_focus(sf::RenderWindow *app);
 
 public:
     void run();

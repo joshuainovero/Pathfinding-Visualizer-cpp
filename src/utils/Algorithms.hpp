@@ -6,6 +6,7 @@
 #include <vector>
 #include <queue>
 #include <cmath>
+#include <climits>
 #include "Node.hpp"
 
 class Algorithms_ {

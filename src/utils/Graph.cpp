@@ -42,12 +42,12 @@ Graph::Graph(uint32_t rows, uint32_t width){
     current_maze_algo = Maze_Algorithms::RM;
 }
 
-sf::Vector2i Graph::rowcol_pos_click(sf::Vector2i pos){
+sf::Vector2u Graph::rowcol_pos_click(sf::Vector2i pos){
     uint32_t y = pos.x;
     uint32_t x = pos.y;
     uint32_t row = y / tile_gap;
     uint32_t col = x / tile_gap;
-    return sf::Vector2i(row, col);
+    return sf::Vector2u(row, col);
 }
 
 void Graph::draw_grid(sf::RenderWindow *window){

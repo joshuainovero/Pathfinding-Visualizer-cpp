@@ -10,6 +10,7 @@ App::App(uint32_t total_rows) : graph(total_rows, sf::VideoMode::getDesktopMode(
     visualize_path = false;
     finished_visualizing = false;
     visualize_maze = false;
+    app_in_focus = true;
     visited_count = 0;
     path_count = 0;
     maze_count = 0;
@@ -24,22 +25,6 @@ App::App(uint32_t total_rows) : graph(total_rows, sf::VideoMode::getDesktopMode(
     mouse_scroll_value = 3;
 }
 
-bool App::app_in_focus(sf::RenderWindow *app) {
-    if(app == NULL)
-        return false;
-
-    HWND handle = app->getSystemHandle();
-    bool one = handle == GetFocus();
-    bool two = handle == GetForegroundWindow();
-
-    if(one != two){
-        SetFocus(handle);
-        SetForegroundWindow(handle);
-    }
-
-    return one && two;
-    
-}
 
 void App::updateSFMLEvents(){
     while (window->pollEvent(sfEvent)){
@@ -88,6 +73,9 @@ void App::updateSFMLEvents(){
                     }
                 }
             break;
+            
+            case sf::Event::LostFocus: app_in_focus = false; break;
+            case sf::Event::GainedFocus: app_in_focus = true; break;
             default:break;
         }
     }
@@ -96,9 +84,9 @@ void App::updateSFMLEvents(){
 void App::update(){
     dt = dtClock.restart().asSeconds();
     updateSFMLEvents();
-    if (app_in_focus(window)){
+    if (app_in_focus){
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-            sf::Vector2i rowcol = graph.rowcol_pos_click(mousePos.getPosition(*window));
+            sf::Vector2u rowcol = graph.rowcol_pos_click(mousePos.getPosition(*window));
             if (finished_visualizing){
                 if (!mouse_down){
                     for (size_t i = 0; i < graph.total_rows; ++i){
@@ -281,14 +269,13 @@ void App::update(){
             }
             else if (textures.clickable_in_range(textures.help_ranges, mousePos)){
                 if (!mouse_down){
-                    MessageBoxA(NULL, "Left click on tiles - place obstacles\nRight click on tiles - remove obstacles\nScroll - Adjust grid\nMove start point & target point - right click\nExit - esc", "Help", MB_ICONINFORMATION);
                     mouse_down = true;
                 }
             }
             
         }
         else if (sf::Mouse::isButtonPressed(sf::Mouse::Right)){
-            sf::Vector2i rowcol = graph.rowcol_pos_click(mousePos.getPosition(*window));
+            sf::Vector2u rowcol = graph.rowcol_pos_click(mousePos.getPosition(*window));
             if (rowcol.x < graph.total_rows){
                 if (!mouse_down){
                     Node* clicked_node = graph.board[rowcol.x][rowcol.y];
