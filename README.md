@@ -4,6 +4,12 @@ Visualize common pathfinding algorithms through the animations of this applicati
 ## What is Pathfinding? ##
 In computer science, there are a lot of situations that require us to find the shortest path between a set of points. Graphs are essential in pathfinding algorithms; in basic terms, graphs exist as an environment, and their traversals are calculated by the type of pathfinding algorithm being used.
 
+## For Linux ##
+If you want to build binaries from source in linux, you must install the SFML package:
+```sh
+sudo apt-get install libsfml-dev
+```
+
 ## How to use ##
 ### Setting the starting node and the target node ###
 If you want to move the starting node and target node from their default location, you can simply right click them and drag them around the board.
