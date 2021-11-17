@@ -1,9 +1,9 @@
 #ifndef ALGORITHM_H
 #define ALGORITHM_H
 #include <cmath>
+#include <climits>
 #include <vector>
 #include "Node.hpp"
-#include <climits>
 
 class Algorithm_ {
 public:
