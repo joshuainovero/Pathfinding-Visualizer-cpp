@@ -3,6 +3,7 @@
 #include <cmath>
 #include <vector>
 #include "Node.hpp"
+#include <climits>
 
 class Algorithm_ {
 public:
