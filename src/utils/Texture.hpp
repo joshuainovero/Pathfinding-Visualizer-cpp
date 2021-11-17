@@ -4,6 +4,7 @@
 
 class Texture_ {
 public:
+
     sf::Texture visualize_texture;
     sf::Texture astar_cb_texture;
     sf::Texture dijkstra_cb_texture;
@@ -66,13 +67,19 @@ public:
     void set_position_left(float n, T &obj);
 
     void set_ranges(float ranges_[4], sf::Sprite &sprite, bool center);
+
     void load_image(sf::Texture &texture, sf::Sprite &sprite, const char *file, float scale_n, float pos_y, bool center);
+
     void load_text(sf::Text &text, sf::Color color, const char *content, float size, bool center, uint32_t y);
+
     void position_checkbox(sf::Sprite &sprite, sf::Text &text, int pos_order);
+
     void position_check(int pos_order);
+
     void position_maze_buttons();
 
     bool clickable_in_range(sf::RenderWindow* window, float ranges_[4], sf::Mouse mouse_pos);
+    
     Texture_();
 };
 

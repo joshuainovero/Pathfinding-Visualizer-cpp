@@ -6,20 +6,24 @@
 
 class App {
 private:
+
     sf::RenderWindow *window;
     sf::Event sfEvent;
     sf::Clock dtClock;
     sf::Clock *clock_timer;
     sf::Mouse mousePos;
+
     std::vector<Node*> visited_nodes;
     std::vector<Node*> path_nodes;
     std::vector<Node*> *maze_path;
     std::unordered_map<uint32_t, uint32_t> row_sizes;
+
     uint32_t mouse_scroll_value;
     uint32_t temp_mouse_value;
+    uint32_t visited_count, path_count, maze_count;
+
     Graph graph;
     Texture_ textures;
-    uint32_t visited_count, path_count, maze_count;
     
     float dt;
     float total_time;
@@ -35,9 +39,11 @@ private:
     void update();
 
 public:
+
     void run();
 
     App(uint32_t total_rows);
+
     ~App();
 };
 
