@@ -2,7 +2,7 @@
 #include <iostream>
 
 App::App(uint32_t total_rows) : graph(total_rows, sf::VideoMode::getDesktopMode().height), textures(){
-    window = new sf::RenderWindow(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "Pathfinding Visualizer", sf::Style::Close | sf::Style::Fullscreen);
+    window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "Pathfinding Visualizer", sf::Style::Close);
     window->setFramerateLimit(120);
     dt = 0.0f;
     total_time = 0.0f;
@@ -68,6 +68,12 @@ void App::updateSFMLEvents(){
                             graph.board[i].clear();
                         }
                         delete [] graph.board;
+                        delete graph.a_star;
+                        delete graph.dijkstra;
+                        delete graph.BFS;
+                        delete graph.DFS;
+                        delete graph.recursive_maze;
+                        delete graph.random_terrain;
                         graph.construct_graph(row_sizes[mouse_scroll_value], sf::VideoMode::getDesktopMode().height);
 
                     }
@@ -86,7 +92,7 @@ void App::update(){
     updateSFMLEvents();
     if (app_in_focus){
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-            sf::Vector2u rowcol = graph.rowcol_pos_click(mousePos.getPosition(*window));
+            sf::Vector2u rowcol = graph.rowcol_pos_click(mousePos.getPosition(*window));        
             if (finished_visualizing){
                 if (!mouse_down){
                     for (size_t i = 0; i < graph.total_rows; ++i){
@@ -102,7 +108,7 @@ void App::update(){
                     mouse_down = true;
                 }
             }
-            else if (rowcol.x < graph.total_rows){
+            else if (!(rowcol.x >= graph.total_rows) && !(rowcol.y >= graph.total_rows)){
                 Node* clicked_node = graph.board[rowcol.x][rowcol.y];
                 if (!(graph.start_node) && clicked_node != graph.end_node){
                     graph.start_node = clicked_node;
@@ -117,32 +123,18 @@ void App::update(){
                 }
             }
 
-            else if (textures.clickable_in_range(textures.visualize_ranges, mousePos)){
+            else if (textures.clickable_in_range(window, textures.visualize_ranges, mousePos)){
                 if (graph.start_node != nullptr  && graph.end_node != nullptr){
                     if (!visualize_visiting && !visualize_path){
                         if (!mouse_down){
-                            for (size_t i = 0; i < graph.total_rows; ++i){
-                                for (auto node : graph.board[i]){
-                                    node->update_neighbors(graph.board);
-                                }
-                            }
+
                             clock_timer = new sf::Clock();
-                            switch (graph.current_algo){
-                                case PF_Algorithms::Astar:
-                                    
-                                    graph.algorithms.a_star(graph.board, graph.start_node, graph.end_node, graph.total_rows, visited_nodes, path_nodes);
-                                break;
-                                case PF_Algorithms::Dijkstra:
-                                    graph.algorithms.dijkstra(graph.board, graph.start_node, graph.end_node, graph.total_rows, visited_nodes, path_nodes);
-                                break;
-                                case PF_Algorithms::BFS:
-                                    graph.algorithms.bfs(graph.board, graph.start_node, graph.end_node, graph.total_rows, visited_nodes, path_nodes);     
-                                break;
-                                case PF_Algorithms::DFS:
-                                    graph.algorithms.dfs(graph.board, graph.start_node, graph.end_node, graph.total_rows, visited_nodes, path_nodes);      
-                                break;
-                                default:break;
-                            }
+
+                            graph.current_search_algo->run(graph.start_node, graph.end_node);
+                            visited_nodes = graph.current_search_algo->getVisitedNodes();
+                            path_nodes = graph.current_search_algo->getPathNodes();
+                            graph.current_search_algo->reset_attributes();
+
                             std::string log_msg;
                             if (!path_nodes.empty()){
                                 log_msg = "Time taken: " + std::to_string(clock_timer->getElapsedTime().asMilliseconds()) +" ms\nVisited nodes: " + std::to_string(visited_nodes.size() - 1) + "\nPath length: " + std::to_string(path_nodes.size() + 1);
@@ -163,7 +155,7 @@ void App::update(){
                     }
                 }
             }
-            else if (textures.clickable_in_range(textures.generate_ranges, mousePos)){
+            else if (textures.clickable_in_range(window, textures.generate_ranges, mousePos)){
                 if (graph.start_node != nullptr  && graph.end_node != nullptr){
                     if (!visualize_visiting && !visualize_path && !visualize_maze){
                         if (!mouse_down){
@@ -175,16 +167,10 @@ void App::update(){
                                     } 
                                 }
                             }
-                            for (size_t i = 0; i < graph.total_rows; ++i){
-                                for (auto node : graph.board[i]){
-                                   node->update_neighbors(graph.board);  
-                                }
-                            }
                             switch (graph.current_maze_algo){
                                 case Maze_Algorithms::RM:
-
-                                    graph.algorithms.generate_maze(graph.board);
-
+                                    graph.current_terrain_algo->run(graph.start_node);
+                                    
                                     for (size_t i = 0; i < graph.total_rows; ++i){
                                         for (size_t k = 0; k < graph.total_rows; ++k){
                                             if (graph.board[i][k]->visited_maze == false){
@@ -202,7 +188,7 @@ void App::update(){
                                     visualize_maze = true;
                                 break;
                                 case Maze_Algorithms::RAND_T:
-                                    graph.algorithms.random_terrain(graph.board, graph.start_node, graph.end_node, graph.total_rows);
+                                    graph.current_terrain_algo->run();
                                 break;
                                 default:break;
                             }
@@ -211,7 +197,7 @@ void App::update(){
                     }
                 }
             }
-            else if (textures.clickable_in_range(textures.clear_ranges, mousePos)){
+            else if (textures.clickable_in_range(window, textures.clear_ranges, mousePos)){
                 if (graph.start_node != nullptr  && graph.end_node != nullptr){
                     if (!visualize_visiting && !visualize_path && !visualize_maze){
                         for (size_t i = 0; i < graph.total_rows; ++i){
@@ -225,49 +211,51 @@ void App::update(){
                     }
                 }
             }
-            else if (textures.clickable_in_range(textures.astar_ranges, mousePos)){
+            else if (textures.clickable_in_range(window, textures.astar_ranges, mousePos)){
                 if (!mouse_down){
-                    graph.current_algo = PF_Algorithms::Astar;
+                    graph.current_search_algo = graph.a_star;
                     textures.position_check(0);
                     mouse_down = true;
                 }
             }
-            else if (textures.clickable_in_range(textures.dijkstra_ranges, mousePos)){
+            else if (textures.clickable_in_range(window, textures.dijkstra_ranges, mousePos)){
                 if (!mouse_down){
-                    graph.current_algo = PF_Algorithms::Dijkstra;
+                    graph.current_search_algo = graph.dijkstra;
                     textures.position_check(1);
                     mouse_down = true;
                 }
             }
-            else if (textures.clickable_in_range(textures.bfs_ranges, mousePos)){
+            else if (textures.clickable_in_range(window, textures.bfs_ranges, mousePos)){
                 if (!mouse_down){
-                    graph.current_algo = PF_Algorithms::BFS;
+                    graph.current_search_algo = graph.BFS;
                     textures.position_check(2);
                     mouse_down = true;
                 }
             }
-            else if (textures.clickable_in_range(textures.dfs_ranges, mousePos)){
+            else if (textures.clickable_in_range(window, textures.dfs_ranges, mousePos)){
                 if (!mouse_down){
-                    graph.current_algo = PF_Algorithms::DFS;
+                    graph.current_search_algo = graph.DFS;
                     textures.position_check(3);
                     mouse_down = true;
                 }
             }
-            else if (textures.clickable_in_range(textures.rm_ranges, mousePos)){
+            else if (textures.clickable_in_range(window, textures.rm_ranges, mousePos)){
                 if (!mouse_down){
                     graph.current_maze_algo = Maze_Algorithms::RM;
+                    graph.current_terrain_algo = graph.recursive_maze;
                     textures.position_check(4);
                     mouse_down = true;
                 }
             }
-            else if (textures.clickable_in_range(textures.rand_ranges, mousePos)){
+            else if (textures.clickable_in_range(window, textures.rand_ranges, mousePos)){
                 if (!mouse_down){
                     graph.current_maze_algo = Maze_Algorithms::RAND_T;
+                    graph.current_terrain_algo = graph.random_terrain;
                     textures.position_check(5);
                     mouse_down = true;
                 }
             }
-            else if (textures.clickable_in_range(textures.help_ranges, mousePos)){
+            else if (textures.clickable_in_range(window, textures.help_ranges, mousePos)){
                 if (!mouse_down){
                     mouse_down = true;
                 }
@@ -437,5 +425,11 @@ App::~App(){
     }
     delete [] graph.board;
     delete [] maze_path;
+    delete graph.a_star;
+    delete graph.dijkstra;
+    delete graph.BFS;
+    delete graph.DFS;
+    delete graph.recursive_maze;
+    delete graph.random_terrain;
     delete window;
 }

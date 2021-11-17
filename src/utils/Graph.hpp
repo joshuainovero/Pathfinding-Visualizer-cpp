@@ -1,10 +1,14 @@
 #ifndef GRAPH_H
 #define GRAHP_H
 #include "Node.hpp"
-#include "Algorithms.hpp"
+#include "Astar.hpp"
+#include "Dijkstra.hpp"
+#include "BFS.hpp"
+#include "DFS.hpp"
+#include "RecursiveMaze.hpp"
+#include "RandomTerrain.hpp"
 #include <vector>
 
-enum PF_Algorithms {Astar, Dijkstra, BFS, DFS};
 enum Maze_Algorithms {RM, RAND_T};
 
 class Graph {
@@ -12,8 +16,10 @@ public:
     std::vector<Node*> *board;  
     sf::RectangleShape horLine, vertLine;
     sf::RectangleShape green_tile, red_tile;
-    Algorithms_ algorithms;
-    PF_Algorithms current_algo;
+    Search_ *a_star, *dijkstra, *BFS, *DFS;
+    Algorithm_ *recursive_maze, *random_terrain;
+    Search_* current_search_algo;
+    Algorithm_* current_terrain_algo;
     Maze_Algorithms current_maze_algo;
     Node* start_node;
     Node* end_node;

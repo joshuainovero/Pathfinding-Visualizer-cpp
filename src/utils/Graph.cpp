@@ -1,5 +1,4 @@
 #include "Graph.hpp"
-#include <iostream>
 
 void Graph::construct_graph(uint32_t rows, uint32_t width){
     board = new std::vector<Node*>[rows];
@@ -28,6 +27,15 @@ void Graph::construct_graph(uint32_t rows, uint32_t width){
 
     board[total_rows - row_pos - 1][col_pos]->set_target();
     end_node = board[total_rows - row_pos - 1][col_pos];
+
+    a_star = new Astar_(board, total_rows, start_node, end_node);
+    dijkstra = new Dijkstra_(board, total_rows, start_node, end_node);
+    BFS = new BFS_(board, total_rows, start_node, end_node);
+    DFS = new DFS_(board, total_rows, start_node, end_node);
+    recursive_maze = new RecursiveMaze(board, total_rows);
+    random_terrain = new RandomTerrain(board, total_rows);
+    current_search_algo = a_star;
+    current_terrain_algo = recursive_maze;
 }
 
 Graph::Graph(uint32_t rows, uint32_t width){
@@ -37,8 +45,6 @@ Graph::Graph(uint32_t rows, uint32_t width){
 
     green_tile.setFillColor(START_COLOR);
     red_tile.setFillColor(TARGET_COLOR);
-
-    current_algo = PF_Algorithms::Astar;
     current_maze_algo = Maze_Algorithms::RM;
 }
 
