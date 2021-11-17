@@ -106,8 +106,8 @@ void Texture_::position_check(int pos_order){
     }
 }
 
-bool Texture_::clickable_in_range(float ranges_[4], sf::Mouse mouse_pos){
-    sf::Vector2f pos(mouse_pos.getPosition().x, mouse_pos.getPosition().y);
+bool Texture_::clickable_in_range(sf::RenderWindow* window, float ranges_[4], sf::Mouse mouse_pos){
+    sf::Vector2f pos(mouse_pos.getPosition(*window).x, mouse_pos.getPosition(*window).y);
     return ((pos.x >= ranges_[0] && pos.x <= ranges_[1]) && (pos.y >= ranges_[2] && pos.y <= ranges_[3]));
 }
 

@@ -72,7 +72,7 @@ public:
     void position_check(int pos_order);
     void position_maze_buttons();
 
-    bool clickable_in_range(float ranges_[4], sf::Mouse mouse_pos);
+    bool clickable_in_range(sf::RenderWindow* window, float ranges_[4], sf::Mouse mouse_pos);
     Texture_();
 };
 
