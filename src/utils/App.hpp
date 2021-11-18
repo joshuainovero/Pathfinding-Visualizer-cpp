@@ -35,13 +35,14 @@ private:
     
     float dt;
     float total_time;
-    
+
     bool visualize_visiting;
     bool visualize_path;
     bool finished_visualizing;
     bool visualize_maze;
     bool mouse_down;
     bool app_in_focus;
+    bool grid_status;
 
     void render();
     void updateSFMLEvents();

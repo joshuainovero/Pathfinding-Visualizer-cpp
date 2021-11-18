@@ -77,23 +77,37 @@ sf::Vector2u Graph::rowcol_pos_click(sf::Vector2i pos){
     return sf::Vector2u(row, col);
 }
 
-void Graph::draw_grid(sf::RenderWindow *window){
+void Graph::draw_grid(sf::RenderWindow *window, const bool& enable){
     float row_pos_y;
     float col_pos_x;
 
-    for (size_t i = 0; i <= total_rows; ++i){
-        row_pos_y = i * tile_gap;
-        horLine.setPosition(0, row_pos_y);
-        window->draw(horLine);
-        for (size_t j = 0; j <= total_rows; ++j){
-            col_pos_x = j * tile_gap;
-            vertLine.setPosition(col_pos_x, 0);
-            window->draw(vertLine);
+    if (enable) {
+        for (size_t i = 0; i <= total_rows; ++i){
+            row_pos_y = i * tile_gap;
+            horLine.setPosition(0, row_pos_y);
+            window->draw(horLine);
+            for (size_t j = 0; j <= total_rows; ++j){
+                col_pos_x = j * tile_gap;
+                vertLine.setPosition(col_pos_x, 0);
+                window->draw(vertLine);
+            }
         }
+    }
+    
+    else {
+        horLine.setPosition(0, 0);
+        window->draw(horLine);
+        horLine.setPosition(0, total_rows * tile_gap);
+        window->draw(horLine);
+
+        vertLine.setPosition(0, 0);
+        window->draw(vertLine);
+        vertLine.setPosition(total_rows * tile_gap, 0);
+        window->draw(vertLine);
     }
 }
 
-void Graph::draw_tiles(sf::RenderWindow *window, bool visualize_visiting){
+void Graph::draw_tiles(sf::RenderWindow *window, const bool& visualize_visiting){
     for (size_t i = 0; i < total_rows; ++i){
         for (auto node : board[i]){
             if (!visualize_visiting)

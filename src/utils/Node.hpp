@@ -15,13 +15,14 @@
 struct Node {
 
     std::vector<Node*> neighbors;
+
     sf::RectangleShape tile_shape;
-    sf::Color color;
+    sf::Color          color;
 
     uint32_t row, col;
     uint32_t total_rows;
-    float x, y;
-    float width;
+    float    x, y;
+    float    width;
 
     bool visited_maze;
 

@@ -11,6 +11,7 @@ App::App(uint32_t total_rows) : graph(total_rows, sf::VideoMode::getDesktopMode(
     finished_visualizing = false;
     visualize_maze = false;
     app_in_focus = true;
+    grid_status = true;
     visited_count = 0;
     path_count = 0;
     maze_count = 0;
@@ -44,6 +45,9 @@ void App::updateSFMLEvents(){
                             }
                         }
                     }
+                }
+                else if (sfEvent.text.unicode == int('g') || sfEvent.text.unicode == int('G')){
+                    grid_status = (grid_status) ? false : true;
                 }
                 else if (sfEvent.text.unicode == 27)
                     window->close();
@@ -262,9 +266,7 @@ void App::update(){
             
         }
         else if (sf::Mouse::isButtonPressed(sf::Mouse::Right)){
-            std::cout << "Clicking right" << std::endl;
             sf::Vector2u rowcol = graph.rowcol_pos_click(mousePos.getPosition(*window));
-            std::cout << rowcol.x << " " << rowcol.y << std::endl;
             if (rowcol.x < graph.get_total_rows()){
                 if (!mouse_down){
                     Node* clicked_node = graph.get_board()[rowcol.x][rowcol.y];
@@ -280,7 +282,6 @@ void App::update(){
                         clicked_node->reset();
                     }
                 }
-                            std::cout << "Clicking second" << std::endl;
             }
 
         }
@@ -372,7 +373,7 @@ void App::render(){
             }
         }
     }
-    graph.draw_grid(window);
+    graph.draw_grid(window, grid_status);
 
     textures.drawSprites(window);
 

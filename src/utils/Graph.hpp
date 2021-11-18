@@ -24,9 +24,9 @@ public:
 
     void clear_graph();
 
-    void draw_grid(sf::RenderWindow *window);
+    void draw_grid(sf::RenderWindow *window, const bool& enable);
 
-    void draw_tiles(sf::RenderWindow *window, bool visualize_visiting);
+    void draw_tiles(sf::RenderWindow *window, const bool& visualize_visiting);
     
     void assign_start(Node* v__);
 
