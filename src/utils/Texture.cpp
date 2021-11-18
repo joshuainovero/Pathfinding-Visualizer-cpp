@@ -183,3 +183,30 @@ Texture_::Texture_(){
     help_sprite.setPosition((help_sprite.getPosition().x + excess_panel) - ((67.0f/768.0f) * sf::VideoMode::getDesktopMode().height), help_sprite.getPosition().y);
     set_ranges(help_ranges, help_sprite, false);
 }
+
+void Texture_::drawSprites(sf::RenderWindow* window){
+    window->draw(visualize_sprite);
+    window->draw(algo_choice_text);
+    window->draw(astar_cb_sprite);
+    window->draw(astar_text);
+    window->draw(dijkstra_cb_sprite);
+    window->draw(dijkstra_text);
+    window->draw(bfs_cb_sprite);
+    window->draw(rec_cb_sprite);
+    window->draw(rand_cb_sprite);
+    window->draw(bfs_text);
+    window->draw(dfs_cb_sprite);
+    window->draw(dfs_text);
+    window->draw(recursive_maze_text);
+    window->draw(random_terrain_text);
+    window->draw(check_sprite);
+    window->draw(check2_sprite);
+    window->draw(terrain_text);
+    window->draw(generate_sprite);
+    window->draw(clear_sprite);
+    window->draw(thematic_break);
+    window->draw(legend_sprite);
+    window->draw(algorithm_log_text);
+    window->draw(help_sprite);
+
+}

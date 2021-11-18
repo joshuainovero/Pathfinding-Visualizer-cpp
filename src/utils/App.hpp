@@ -5,13 +5,21 @@
 #include "Graph.hpp"
 
 class App {
+public:
+
+    void run();
+
+    App(uint32_t total_rows);
+
+    ~App();
+
 private:
 
     sf::RenderWindow *window;
     sf::Event sfEvent;
+    sf::Mouse mousePos;
     sf::Clock dtClock;
     sf::Clock *clock_timer;
-    sf::Mouse mousePos;
 
     std::vector<Node*> visited_nodes;
     std::vector<Node*> path_nodes;
@@ -27,6 +35,7 @@ private:
     
     float dt;
     float total_time;
+    
     bool visualize_visiting;
     bool visualize_path;
     bool finished_visualizing;
@@ -38,13 +47,6 @@ private:
     void updateSFMLEvents();
     void update();
 
-public:
-
-    void run();
-
-    App(uint32_t total_rows);
-
-    ~App();
 };
 
 #endif

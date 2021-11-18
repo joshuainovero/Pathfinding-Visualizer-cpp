@@ -12,6 +12,10 @@ public:
 
     virtual void run(Node* start = nullptr, Node* end = nullptr) override;
 
+private:
+
+    static constexpr float ratio_overall = 0.7530864198f;
+
 };
 
 #endif // RANDOM_TERRAIN_H

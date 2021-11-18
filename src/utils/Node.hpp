@@ -12,8 +12,7 @@
 #define TARGET_COLOR sf::Color::Red
 #define BLANK_COLOR sf::Color::White
 
-class Node {
-public:
+struct Node {
 
     std::vector<Node*> neighbors;
     sf::RectangleShape tile_shape;

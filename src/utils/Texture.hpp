@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 class Texture_ {
-public:
+private:
 
     sf::Texture visualize_texture;
     sf::Texture astar_cb_texture;
@@ -41,10 +41,15 @@ public:
     sf::Text terrain_text;
     sf::Text recursive_maze_text;
     sf::Text random_terrain_text;
-    sf::Text algorithm_log_text;
     sf::Font font;
 
     sf::RectangleShape thematic_break;
+    
+
+
+public:
+
+    sf::Text algorithm_log_text;
     
     float visualize_ranges[4];
     float generate_ranges[4];
@@ -77,6 +82,8 @@ public:
     void position_check(int pos_order);
 
     void position_maze_buttons();
+
+    void drawSprites(sf::RenderWindow* window);
 
     bool clickable_in_range(sf::RenderWindow* window, float ranges_[4], sf::Mouse mouse_pos);
     
