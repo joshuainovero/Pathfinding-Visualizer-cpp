@@ -15,8 +15,8 @@ include_directories(${PROJECT_SOURCE_DIR}/External/SFML/include)
 
 add_executable(PathfindingVisualizer ${PROJECT_SOURCE_DIR}/src/main.cpp)
 
-file(GLOB HEADERS_ ${PROJECT_SOURCE_DIR}/src/utils/*.hpp)
-file (GLOB CPP_ ${PROJECT_SOURCE_DIR}/src/utils/*.cpp)
+file(GLOB HEADERS_ ${PROJECT_SOURCE_DIR}/src/Pathfinding-Visualizer/*.hpp)
+file (GLOB CPP_ ${PROJECT_SOURCE_DIR}/src/Pathfinding-Visualizer/*.cpp)
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR})
 
