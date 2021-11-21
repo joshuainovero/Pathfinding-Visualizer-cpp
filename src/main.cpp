@@ -1,4 +1,4 @@
-#include "utils/App.hpp"
+#include "Pathfinding-Visualizer/App.hpp"
 #include <time.h>
 
 int main(){

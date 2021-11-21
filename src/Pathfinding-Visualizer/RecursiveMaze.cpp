@@ -6,7 +6,6 @@ RecursiveMaze::RecursiveMaze(std::vector<Node*>* tiles_, uint32_t total_rows_)
 RecursiveMaze::~RecursiveMaze() {}
 
 void RecursiveMaze::run(Node* start, Node* end){
-    std::srand(time(0));
     updateTileNeighbors();
     std::unordered_map<Node*, bool> visited;
     Node* current = tiles[0][0];

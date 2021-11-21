@@ -86,11 +86,11 @@ void Graph::draw_grid(sf::RenderWindow *window, const bool& enable){
             row_pos_y = i * tile_gap;
             horLine.setPosition(0, row_pos_y);
             window->draw(horLine);
-            for (size_t j = 0; j <= total_rows; ++j){
-                col_pos_x = j * tile_gap;
-                vertLine.setPosition(col_pos_x, 0);
-                window->draw(vertLine);
-            }
+        }
+        for (size_t j = 0; j <= total_rows; ++j){
+            col_pos_x = j * tile_gap;
+            vertLine.setPosition(col_pos_x, 0);
+            window->draw(vertLine);
         }
     }
     
