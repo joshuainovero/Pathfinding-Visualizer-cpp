@@ -8,7 +8,7 @@ set(SF_LIB "-lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio")
 if (UNIX AND NOT APPLE)
     set(CMAKE_CXX_FLAGS "${GCC_FLAGS} ${SF_LIB}")
 else()
-    set(CMAKE_CXX_FLAGS "${GCC_FLAGS} -L../External/SFML/lib  ${SF_LIB}")
+    set(CMAKE_CXX_FLAGS "${GCC_FLAGS} -mwindows -L../External/SFML/lib  ${SF_LIB}")
 endif ()
 
 include_directories(${PROJECT_SOURCE_DIR}/External/SFML/include)
