@@ -2,7 +2,9 @@
 #include <iostream>
 
 App::App(uint32_t total_rows) : graph(total_rows, sf::VideoMode::getDesktopMode().height), textures(){
-    window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "Pathfinding Visualizer", sf::Style::Close);
+    auto DesktopMode = sf::VideoMode::getDesktopMode();
+    DesktopMode.height += 1;
+    window = new sf::RenderWindow(DesktopMode, "Pathfinding Visualizer", sf::Style::None);
     window->setFramerateLimit(120);
     dt = 0.0f;
     total_time = 0.0f;
@@ -120,6 +122,12 @@ void App::update(){
                 if (graph.STNodes().first != nullptr  && graph.STNodes().second != nullptr){
                     if (!visualize_visiting && !visualize_path){
                         if (!mouse_down){
+
+                            // Check if start and end nodes are besides each other
+                            // Return if it is
+                            auto startNeighbors = graph.STNodes().first->neighbors;
+                            if((std::find(startNeighbors.begin(), startNeighbors.end(), graph.STNodes().second)) != startNeighbors.end())
+                                return;
 
                             clock_timer = new sf::Clock();
 
